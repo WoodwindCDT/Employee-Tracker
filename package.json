@@ -6,6 +6,7 @@
   "dependencies": {
     "console.table": "^0.10.0",
     "inquirer": "^7.3.3",
+    "moment": "^2.29.1",
     "mysql2": "^2.2.5"
   },
   "devDependencies": {},

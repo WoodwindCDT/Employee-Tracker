@@ -1,5 +1,10 @@
+// Dependencies
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+
+// Moment JS for user
+const moment = require('moment');
+const today = moment().format('YYYY-MM-DD');
 
 // To create the connection to database/localConnection
 const connection = mysql.createConnection({
@@ -68,6 +73,7 @@ function askPrompt() {
                 break;
 
             default:
+                console.log('GoodBye! ' + today);
                 connection.end();
                 break;
         };
