@@ -4,7 +4,7 @@
   
   ## Description 
   
-  This project was created for a Team Management Usage. The Node.JS allows a user to navigate through a series of  Prompts to add, view, update - Employee, Roles, and Department Information.
+  This project was created for Team Management Usage. The Node.JS allows a user to navigate through a series of Prompts to add, view, update - Employee, Roles, and Department Information.
   
   ## Table of contents
   
