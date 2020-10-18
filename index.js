@@ -1,42 +1,22 @@
-// GIVEN a command-line application that accepts user input
-// WHEN I start the application
-// THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
-// WHEN I choose to view all departments
-// THEN I am presented with a formatted table showing department names and department ids
-// WHEN I choose to view all roles
-// THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
-// WHEN I choose to view all employees
-// THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
-// WHEN I choose to add a department
-// THEN I am prompted to enter the name of the department and that department is added to the database
-// WHEN I choose to add a role
-// THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
-// WHEN I choose to add an employee
-// THEN I am prompted to enter the employee’s first name, last name, role, and manager and that employee is added to the database
-// WHEN I choose to update an employee role
-// THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
-
 const mysql = require('mysql2');
-var inquirer = require('inquirer');
+const inquirer = require('inquirer');
 
 // To create the connection to database/localConnection
 const connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
     user: 'root',
-    password: 'EnderW_766!Val.',
-    database: './db/employee'
+    password: '',
+    database: "employee_DB"
 });
-
-console.log(connection);
 
 connection.connect(function(err) {
     // Connection Error Handling
     if (err) throw err;
 
     // To log connection to user
-    console.log(`Now connected as ${connection.threadId}`);
-    startPrompt();
+    console.log("Connected as ID: " + connection.threadId + "\n");
+    askPrompt();
 });
 
 // To start Prompt for User to select Options
@@ -110,7 +90,7 @@ function viewDepartments() {
 };
 
 function viewRoles() {
-    connection.query("SELECT * FROM role", function (err, data) {
+    connection.query("SELECT * FROM roles", function (err, data) {
         console.table(data);
         askPrompt();
     });
@@ -140,7 +120,7 @@ function addEmployee() {
     ]).then(function(res) {
         connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [res.firstName, res.lastName, res.roleId, res.managerId], function(err, data) {
             if (err) throw err;
-            console.table("Successfully Inserted");
+            console.table(data);
             askPrompt();
         });
     });
@@ -154,7 +134,7 @@ function addDepartment() {
     }, ]).then(function(res) {
         connection.query('INSERT INTO department (name) VALUES (?)', [res.department], function(err, data) {
             if (err) throw err;
-            console.table("Successfully Inserted");
+            console.table(data);
             askPrompt();
         });
     });
@@ -175,8 +155,8 @@ function addRole() {
             type: "number",
             name: "department_id"
         }
-    ]).then(function (response) {
-        connection.query("INSERT INTO roles (title, salary, department_id) values (?, ?, ?)", [response.title, response.salary, response.department_id], function (err, data) {
+    ]).then(function (res) {
+        connection.query("INSERT INTO roles (title, salary, department_id) values (?, ?, ?)", [res.title, res.salary, res.department_id], function (err, data) {
             console.table(data);
         })
         askPrompt();
@@ -194,8 +174,8 @@ function updateEmployeeRole() {
             type: "number",
             name: "role_id"
         }
-    ]).then(function (response) {
-        connection.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [response.role_id, response.name], function (err, data) {
+    ]).then(function (res) {
+        connection.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [res.role_id, res.name], function (err, data) {
             console.table(data);
         })
         askPrompt();
